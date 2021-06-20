@@ -2,7 +2,6 @@ extends base
 include mixins/video
 
 block content
-        a(href="/videos/upload") Upload Video
         each potato in videos
             +video(potato)
         else
