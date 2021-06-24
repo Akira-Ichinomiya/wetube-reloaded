@@ -1,8 +1,10 @@
+import "dotenv/config";
 import "./db";
 import "./models/Video";
 import "./models/User";
 import app from "./server";
 
+console.log(process.env.COOKIE_SECRET, process.env.DB_URL);
 const PORT = 4000;
 
 const handleOpen = () =>

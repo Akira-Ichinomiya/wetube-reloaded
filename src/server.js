@@ -1,12 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import Mongostore from "connect-mongo";
 import globalRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import { PromiseProvider } from "mongoose";
 import { localsMiddleware } from "./middlewares";
-
 const app = express();
 const logger = morgan("dev");
 app.set("view engine", "pug");
@@ -17,8 +17,12 @@ app.use(logger); // 로그 확인
 app.use(
   session({
     secret: "Hello!",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
+    store: Mongostore.create({ mongoUrl: process.env.DB_URL }),
+    cookie: {
+      maxAge: 20000,
+    },
   })
 );
 
