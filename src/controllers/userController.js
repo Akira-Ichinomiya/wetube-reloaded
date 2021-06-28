@@ -73,6 +73,7 @@ export const startGithubLogin = (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
+  console.log("깃허브 로그인에 관한 주소");
   console.log(finalUrl);
   return res.redirect(finalUrl);
 };
@@ -122,7 +123,6 @@ export const finishGithubLogin = async (req, res) => {
     if (!emailObj) {
       return res.redirect("/login");
     }
-    console.log("여기까지오냐?");
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       //계정 생성시키기
@@ -145,9 +145,81 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const edit = (req, res) => res.send("Edit");
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+    file,
+  } = req; // req에서 정보수정을 요청한 유저의 데이터를 가져오기
+  console.log(file);
+  if (await User.exists({ $or: [{ username }, { email }] })) {
+    return res.render("edit-profile", { dupExists: true }); //이메일이나 유저네임 중복 유무 확인
+  }
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
+};
+
 export const logout = (req, res) => {
-  console.log("아니씨발여기아니야?");
+  req.session.destroy();
+  return res.redirect("/");
+};
+
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === false) {
+    return res.render("users/change-password", {
+      pageTitle: "Change Password",
+    });
+  }
+  return res.redirect("/");
+};
+
+export const postChangePassword = async (req, res) => {
+  // 브라우저에 비번 바꿨다고 알림보내기
+  const {
+    session: {
+      user: { _id, password },
+    },
+    body: { oldPassword, new1, new2 },
+  } = req;
+
+  const ok = await bcrypt.compare(oldPassword, password);
+  if (!ok) {
+    //기존 비밀번호 비교
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "기존 비밀번호가 일치하지 않습니다.",
+    });
+  }
+
+  if (new1 !== new2) {
+    //새 비밀번호 비교
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "새로운 비밀번호가 일치하지 않습니다.",
+    });
+  }
+
+  const user = await User.findById(_id);
+  user.password = new1;
+  console.log("세이브 이전:", user.password);
+  await user.save();
+  console.log("세이브 이후:", user.password);
   req.session.destroy();
   return res.redirect("/");
 };
