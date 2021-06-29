@@ -21,13 +21,13 @@ app.use(
     saveUninitialized: false,
     store: Mongostore.create({ mongoUrl: process.env.DB_URL }),
     cookie: {
-      maxAge: 20000,
+      maxAge: 60000,
     },
   })
 );
 
 app.use(localsMiddleware);
-
+app.use("/uploads", express.static("uploads"));
 app.get("/add-one", (req, res, next) => {
   req.session.potato += 1;
   return res.send(`${req.session.id}\n${req.session.potato}`);
