@@ -28,6 +28,7 @@ app.use(
 
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("assets")); //첫번째는 url주소, 두번째는 실제 directory
 app.get("/add-one", (req, res, next) => {
   req.session.potato += 1;
   return res.send(`${req.session.id}\n${req.session.potato}`);
