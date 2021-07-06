@@ -1,8 +1,12 @@
 extends base
 include mixins/video
 
-block content 
-    each potato in videos
-        +video(potato)
-    else
-        li sorry, nothing found.
+block content
+    div.videos-grid
+        each potato in videos
+            +video(potato)
+            +video(potato)
+            +video(potato)
+            +video(potato)
+        else
+            span.empty__message No videos found

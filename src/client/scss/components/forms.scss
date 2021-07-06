@@ -1,0 +1,45 @@
+form {
+  max-width: 460px;
+  margin: 0 10px 0px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  all: unset;
+  background-color: purple;
+  padding: 15px 10px 15px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 10px;
+  color: white;
+  width: 100%;
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+input[type="submit"] {
+  background-color: $red;
+  text-align: center;
+}
+.social__btn {
+  padding: 12px 20px;
+  background-color: $red;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  max-width: 460px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.auth__switch {
+  margin-top: 40px;
+  text-align: center;
+  a {
+    text-decoration: underline;
+  }
+}

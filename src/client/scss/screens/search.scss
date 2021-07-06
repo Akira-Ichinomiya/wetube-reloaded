@@ -1,0 +1,19 @@
+.search__form {
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  button {
+    all: unset;
+  }
+  button {
+    background-color: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
