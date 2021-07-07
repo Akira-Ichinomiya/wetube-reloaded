@@ -174,7 +174,37 @@ export const postEdit = async (req, res) => {
   } = req; // req에서 정보수정을 요청한 유저의 데이터를 가져오기
   console.log(file);
   if (await User.exists({ $or: [{ username }, { email }] })) {
-    return res.render("edit-profile", { dupExists: true }); //이메일이나 유저네임 중복 유무 확인
+    if (
+      email === req.session.user.email &&
+      username !== req.session.user.username
+    ) {
+      //이메일이같고 유저네임이 다르게 입력된 경우
+      console.log("업데이트 진행 1");
+    } else if (
+      email !== req.session.user.email &&
+      username === req.session.user.username
+    ) {
+      //이메일을 바꾸려고 하는데 username이 그대로여서 exists의 조건을 피하기 위함
+      console.log("업데이트 진행 2");
+    } else if (
+      email === req.session.user.email &&
+      username === req.session.user.username
+    ) {
+      //email username 그대로 냅둔 채 다른 걸 수정하는 경우
+      console.log("업데이트 진행 3");
+    } else {
+      return res.render("edit-profile", { dupExists: true }); //이메일이나 유저네임 중복 유무 확인
+    }
+  }
+
+  console.log("socialonly와 이메일 변경 여부를 검사합니다.");
+  if (
+    req.session.user.socialOnly === true &&
+    req.session.user.email !== email
+  ) {
+    //깃허브 로그인인데 이메일을 바꾸려고 하는 경우
+    console.log("깃허브 이메일은 변경할 수 없습니다.");
+    return res.render("edit-profile", { dupExists: true });
   }
   const updatedUser = await User.findByIdAndUpdate(
     _id,

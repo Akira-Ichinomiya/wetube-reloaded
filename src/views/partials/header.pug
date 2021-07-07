@@ -16,7 +16,12 @@ header
                     a(href="/users/edit") Edit Profile
                 li
                     a(href="/videos/upload") Upload Video
-                li
-                    a(href=`/users/${loggedInUser._id}`) My Profile
                 li     
                     a(href="/users/logout") Log out
+                li
+                    a(href=`/users/${loggedInUser._id}`) My Profile
+                li
+                    if loggedInUser.avatarUrl === ""
+                        span 🙎🏻‍♂️
+                    else
+                        img.header__avatar(src="/" + loggedInUser.avatarUrl)

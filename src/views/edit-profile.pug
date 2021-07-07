@@ -1,10 +1,10 @@
 extends base
 
 block content
-    
-    img(src="/" + loggedInUser.avatarUrl, width=100, height=100)
+    div.edit-profile__image
+        img(src="/" + loggedInUser.avatarUrl, width=100, height=100)
     div.default__form
-        form(method="POST", enctype="multipart/form-data")
+        form(method="POST", enctype="multipart/form-data").edit-profile__form
             label(for="avatar") Avatar
             input(type="file", id="avatar", name="avatar", accept="image/*")
             input(name="name",type="text", required=true, placeholder="Your name", value=loggedInUser.name) 
@@ -15,7 +15,7 @@ block content
             if dupExists
                 span 이메일 또는 유저네임이 다른 정보들과 중복되었습니다.
             if !loggedInUser.socialOnly
-                hr
-                a(href="change-password") Change Password &rarr;
+                div.edit-profile__password
+                    a(href="change-password") Change Password &rarr;
 
             
