@@ -32,17 +32,19 @@ const handleVolumeChange = (event) => {
   const {
     target: { value },
   } = event;
-  if (parseInt(value) === 0) {
+  console.log(value);
+  if (video.muted) {
+    //음소거 상태라면
+    video.muted = false;
+    muteBtn.innerText = "Mute";
+  }
+  if (!video.muted && parseFloat(value) === 0) {
     video.muted = true;
     muteBtn.innerText = "Unmute";
-  } else {
-    if (video.muted) {
-      video.muted = false;
-      muteBtn.innerText = "Mute";
-    }
-    volumeValue = value;
-    video.volume = value;
-  }
+  } //음소거 상태가 아닌데 소리가 0이 되는 경우
+
+  volumeValue = value; //글로벌 값 수정
+  video.volume = value; //비디오 볼륨 설정
 };
 
 const handlePause = () => (playBtn.innerText = "Play");
