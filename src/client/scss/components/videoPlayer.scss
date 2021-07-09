@@ -1,0 +1,28 @@
+#videoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#videoControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #9147ff;
+  #primaryFunctions {
+    display: flex;
+    width: 100%;
+    #videoTime {
+      margin-left: 20px;
+    }
+    #time {
+      width: 95%;
+      #timeline {
+        width: 90%;
+      }
+    }
+  }
+}
