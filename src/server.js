@@ -7,6 +7,8 @@ import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import { PromiseProvider } from "mongoose";
 import { localsMiddleware } from "./middlewares";
+import apiRouter from "./routers/apiRouter";
+
 const app = express();
 const logger = morgan("dev");
 app.set("view engine", "pug");
@@ -37,5 +39,6 @@ app.get("/add-one", (req, res, next) => {
 app.use("/videos", videoRouter); //비디오 라우터 활성화
 app.use("/users", userRouter); //유저 라우터 활성화
 app.use("/", globalRouter); //글로벌 라우터 활성화
+app.use("/api", apiRouter);
 
 export default app;
