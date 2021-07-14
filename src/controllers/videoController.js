@@ -33,6 +33,7 @@ export const getEdit = async (req, res) => {
   }
   console.log(video.owner, "그리고", _id);
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "You are not the owner of this video.");
     return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
@@ -49,6 +50,7 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
+  req.flash("success", "Video updated.");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -59,13 +61,15 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file; // req.file.path의 값을 fileUrl이라는 변수에 초기화 한다는 뜻
+  const { video, thumb } = req.files; // req.file.path의 값을 fileUrl이라는 변수에 초기화 한다는 뜻
   const { title, description, hashtags } = req.body;
+  console.log(req.files);
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       hashtags: Video.formatHashtags(hashtags),
       owner: _id,
       meta: {
@@ -79,6 +83,7 @@ export const postUpload = async (req, res) => {
     // await video.save();
     return res.redirect("/");
   } catch (error) {
+    console.log(error);
     return res.render("upload", {
       pageTitle: "Upload video!",
       errorMessage: error._message,

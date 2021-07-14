@@ -232,6 +232,7 @@ export const getChangePassword = (req, res) => {
       pageTitle: "Change Password",
     });
   }
+  req.flash("error", "You can't change password.");
   return res.redirect("/");
 };
 
@@ -263,9 +264,10 @@ export const postChangePassword = async (req, res) => {
 
   const user = await User.findById(_id);
   user.password = new1;
-  console.log("세이브 이전:", user.password);
+  // console.log("세이브 이전:", user.password);
   await user.save();
-  console.log("세이브 이후:", user.password);
+  req.flash("info", "Your password has been changed.");
+  // console.log("세이브 이후:", user.password);
   req.session.destroy();
   return res.redirect("/");
 };
