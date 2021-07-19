@@ -1,5 +1,6 @@
 import Video from "../models/Video";
 import User from "../models/User";
+import Comment from "../models/Comment";
 
 export const home = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner"); //populate가 ref 참조해서 해당하는 schema의 속성값 갖다줌
+  const video = await Video.findById(id).populate("owner").populate("comments"); //populate가 ref 참조해서 해당하는 schema의 속성값 갖다줌
   console.log(video);
   if (video) {
     return res.render("watch", { pageTitle: video.title, video });
@@ -133,4 +134,25 @@ export const registerView = async (req, res) => {
   video.meta.views += 1;
   await video.save();
   return res.sendStatus(200);
+};
+
+export const createComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  const comment = await Comment.create({
+    text,
+    user: user._id,
+    video: id,
+  });
+  video.comments.push(comment._id);
+  video.save();
+  return res.sendStatus(201);
 };

@@ -17,6 +17,7 @@ app.set("views", process.cwd() + "/src/views");
 
 app.use(flash());
 app.use(express.urlencoded({ extended: true })); //POST 또는 PUT을 통해 전송된 encode된 데이터들을 parse하여 읽을 수 있도록 해주는 미들웨어이다. extended:true이면 npm qs의 라이브러리를 사용할 수 있도록 헤준다.
+app.use(express.json());
 app.use(logger); // 로그 확인
 app.use(
   session({
