@@ -6,7 +6,6 @@ import "./models/User";
 import "./models/Comment";
 import app from "./server";
 
-console.log(process.env.COOKIE_SECRET, process.env.DB_URL);
 const PORT = process.env.PORT || 4000;
 
 const handleOpen = () =>
