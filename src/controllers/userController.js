@@ -206,10 +206,11 @@ export const postEdit = async (req, res) => {
     console.log("깃허브 이메일은 변경할 수 없습니다.");
     return res.render("edit-profile", { dupExists: true });
   }
+  const isHeroku = process.env.NODE_ENV === "production";
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.location : avatarUrl,
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       name,
       email,
       username,
